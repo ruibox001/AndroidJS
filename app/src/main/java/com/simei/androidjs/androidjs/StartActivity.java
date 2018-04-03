@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -34,13 +35,18 @@ public class StartActivity extends Activity {
         Button button = (Button) this.findViewById(R.id.button);
 
         jsHelper = new JSHelper(webView);
-        jsHelper.jsHelperJsMethodName(new WebAppInterface(this), "index");
+        jsHelper.jsHelperJsMethodName(new WebAppInterface(this), "jsControl");
         jsHelper.requestUrl("file:///android_asset/index.html");
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jsHelper.jsHelperRunJs("javascript:show('activity传过来的数据')");
+                jsHelper.jsHelperRunJs("javascript:alertMyName('安卓原生发过来的消息')", new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String s) {
+                        System.out.println("执行js返回值："+s);
+                    }
+                });
             }
         });
     }
@@ -51,8 +57,9 @@ public class StartActivity extends Activity {
             mContext = c;
         }
         @JavascriptInterface
-        public void showToast(String toast) {
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        public void nativeMethod(String flatName, String name) {
+            System.out.println(flatName+" "+name);
+            Toast.makeText(mContext, flatName+" > "+name, Toast.LENGTH_SHORT).show();
         }
     }
 }

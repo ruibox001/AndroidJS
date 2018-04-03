@@ -1,5 +1,7 @@
 package com.simei.androidjs.androidjs;
 
+import android.annotation.SuppressLint;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -25,12 +27,13 @@ public class JSHelper {
         }
     }
 
-    public void jsHelperRunJs(String js){
+    @SuppressLint("NewApi")
+    public void jsHelperRunJs(String js, ValueCallback<String> callback){
         if (js == null || js.length() == 0)
             return;
 
         if (webView != null) {
-            webView.loadUrl(js);
+            webView.evaluateJavascript(js,callback);
         }
     }
 
@@ -49,7 +52,8 @@ public class JSHelper {
          }
          }
      */
-    public void jsHelperJsMethodName(Object o,String htmlName){
+    @SuppressLint("JavascriptInterface")
+    public void jsHelperJsMethodName(Object o, String htmlName){
         if (webView != null) {
             webView.addJavascriptInterface(o, htmlName);
         }

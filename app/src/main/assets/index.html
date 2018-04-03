@@ -1,27 +1,35 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<header>
+<!DOCTYPE html>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script type="text/javascript">
-        function secondClick() {
-            index.showToast('分享的标题');
-        }
-        function show(message){
-            document.getElementById("countent").innerHTML=
-             "这是我的javascript调用. 这是："+message;
-        }
-    </script>
-</header>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <title>js和原生交互</title>
+</head>
 <body>
-<h2> 测试JS和Android互调 </h2>
-<br/>
-<br/>
 
-<button type="button" onclick="secondClick()">Click Me!</button>
-<a href="cn.beautifying.simei://">启动应用程序</a>
+<div id="msg2">
+    <p id="countent">html原始数据</p>
+</div>
 
-<p id="countent">html原始数据</p>
+<div id="btns">
+    <a href="javascript:void(0);" onclick="turnPage()">调用原生</a>
+</div>
 
+<script>
+
+        function turnPage() {
+            if (window.webkit){ //苹果平台
+                window.webkit.messageHandlers.jsControl.postMessage({"flatfrom":"苹果","name":"wangshengyuan"});
+            }
+            else { //安卓平台
+                window.jsControl.nativeMethod('安卓','wangshengyuan');
+            }
+        }
+
+        function alertMyName(name) {
+            document.getElementById("countent").innerHTML="原生调用："+name;
+            return "原生调用网页方法后返回参数了";
+        }
+
+    </script>
 </body>
 </html>
